@@ -1,0 +1,39 @@
+struct UnionFind{
+    vector<int> parent;
+    vector<int> rank;
+    vector<int> _size;
+
+    UnionFind(int _n) : parent(_n), _size(_n, 1), rank(_n) {
+        rep(i, _n) parent[i] = i;
+        rep(i, _n) rank[i] = 0;
+        rep(i, _n) _size[i] = 1;
+    }
+
+    int find(int x){
+        if(parent[x] == x) return x;
+        else return parent[x] = find(parent[x]);
+    }
+
+    bool same(int x, int y){
+        return find(x) == find(y);
+    }
+
+    void unite(int x, int y){
+        x = find(x);
+        y = find(y);
+        if(x == y) return;
+
+        if(_size[x] < _size[y]){
+            _size[y] += _size[x];
+            parent[x] = y;
+        }else{
+            _size[x] += _size[y];
+            parent[y] = x;
+        }
+        if(rank[x] == rank[y]) rank[x]++;
+    }
+
+    int size(int x){
+        return _size[find(x)];
+    }
+};
